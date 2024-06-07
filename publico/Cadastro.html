@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produtos</title>
+    <style>
+body {
+    font-family: 'Roboto Slab', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #212121;
+    color: #fff;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #424242;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="date"],
+form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #212121;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #333;
+    color: #fff;
+    font-family: 'Roboto Slab', serif;
+}
+
+form button {
+    background-color: #1976D2;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #1565C0;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #1976D2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Roboto Slab', serif;
+}
+
+button:hover {
+    background-color: #1565C0;
+}
+
+#productList {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #424242;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    font-family: 'Roboto Slab', serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 8px;
+    border-bottom: 1px solid #212121;
+    text-align: left;
+}
+
+table th {
+    background-color: #212121;
+}
+
+
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Produtos</h1>
+    <form action="/cadastrarProduto" method="POST">
+        <label for="codigoBarras">Código de Barras:</label>
+        <input type="text" id="codigoBarras" name="codigoBarras" required>
+        <br>
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao" name="descricao" required>
+        <br>
+        <label for="precoCusto">Preço de Custo:</label>
+        <input type="number" id="precoCusto" name="precoCusto" required>
+        <br>
+        <label for="precoVenda">Preço de Venda:</label>
+        <input type="number" id="precoVenda" name="precoVenda" required>
+        <br>
+        <label for="dataValidade">Data de Validade:</label>
+        <input type="date" id="dataValidade" name="dataValidade" required>
+        <br>
+        <label for="qtdEstoque">Quantidade em Estoque:</label>
+        <input type="number" id="qtdEstoque" name="qtdEstoque" required>
+        <br>
+        <label for="nomeFabricante">Nome do Fabricante:</label>
+        <input type="text" id="nomeFabricante" name="nomeFabricante" required>
+        <br>
+        <button type="submit">Cadastrar Produto</button>
+    </form>
+    <br>
+    <button onclick="fetchProducts()">Ver Produtos Cadastrados</button>
+    <div id="productList"></div>
+    <br>
+    <a href="/logout">Logout</a>
+    <script>
+        function fetchProducts() {
+            fetch('/products')
+                .then(response => response.json())
+                .then(data => {
+                    const productList = document.getElementById('productList');
+                    let html = '<h2>Produtos Cadastrados</h2>';
+                    html += '<table border="1">';
+                    html += '<tr><th>Código de Barras</th><th>Descrição</th><th>Preço de Custo</th><th>Preço de Venda</th><th>Data de Validade</th><th>Quantidade em Estoque</th><th>Nome do Fabricante</th></tr>';
+                    data.products.forEach(product => {
+                        html += `<tr>
+                            <td>${product.codigoBarras}</td>
+                            <td>${product.descricao}</td>
+                            <td>${product.precoCusto}</td>
+                            <td>${product.precoVenda}</td>
+                            <td>${product.dataValidade}</td>
+                            <td>${product.qtdEstoque}</td>
+                            <td>${product.nomeFabricante}</td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    productList.innerHTML = html;
+                });
+        }
+    </script>
+</body>
+</html>
